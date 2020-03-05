@@ -79,6 +79,11 @@ const defaults = {
   attr: null,
 
   /**
+   * @property {boolean} is this a CodeMirror instance
+   */
+  isCm: null,
+
+  /**
    * @property {boolean} bindInputFocusEvents bind to focus and blur if el is text input
    */
   bindInputFocusEvents: false,

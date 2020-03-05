@@ -23,8 +23,9 @@ export default class Initializer {
     self.options = { ...defaults, ...options };
 
     // attribute to type into
-    self.isInput = self.el.tagName.toLowerCase() === 'input';
+    self.isInput = self.el.tagName ? self.el.tagName.toLowerCase() === 'input' : false;
     self.attr = self.options.attr;
+    self.isCm = self.options.isCm;
     self.bindInputFocusEvents = self.options.bindInputFocusEvents;
 
     // show cursor
@@ -37,9 +38,10 @@ export default class Initializer {
     self.cursorBlinking = true;
 
     // text content of element
-    self.elContent = self.attr
-      ? self.el.getAttribute(self.attr)
-      : self.el.textContent;
+    self.elContent = self.isCm ?
+                     self.el.getValue() :
+                     self.attr ?
+                     self.el.getAttribute(self.attr) : self.el.textContent;
 
     // html or plain text
     self.contentType = self.options.contentType;
@@ -135,7 +137,9 @@ export default class Initializer {
 
   getCurrentElContent(self) {
     let elContent = '';
-    if (self.attr) {
+    if (self.isCm) {
+      elContent = self.el.getValue();
+    } else if (self.attr) {
       elContent = self.el.getAttribute(self.attr);
     } else if (self.isInput) {
       elContent = self.el.value;

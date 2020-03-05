@@ -110,7 +110,7 @@ export default class Typed {
    * @private
    */
   typewrite(curString, curStrPos) {
-    if (this.fadeOut && this.el.classList.contains(this.fadeOutClass)) {
+    if (!this.isCm && this.fadeOut && this.el.classList.contains(this.fadeOutClass)) {
       this.el.classList.remove(this.fadeOutClass);
       if (this.cursor) this.cursor.classList.remove(this.fadeOutClass);
     }
@@ -388,7 +388,9 @@ export default class Typed {
     if (this.attr) {
       this.el.setAttribute(this.attr, str);
     } else {
-      if (this.isInput) {
+      if (this.isCm) {
+        this.el.setValue(str);
+      } else if (this.isInput) {
         this.el.value = str;
       } else if (this.contentType === 'html') {
         this.el.innerHTML = str;
@@ -404,7 +406,7 @@ export default class Typed {
    * @private
    */
   bindFocusEvents() {
-    if (!this.isInput) return;
+    if (!this.isInput || this.isCm) return;
     this.el.addEventListener('focus', (e) => {
       this.stop();
     });
@@ -421,7 +423,7 @@ export default class Typed {
    * @private
    */
   insertCursor() {
-    if (!this.showCursor) return;
+    if (!this.showCursor || this.isCm) return;
     if (this.cursor) return;
     this.cursor = document.createElement('span');
     this.cursor.className = 'typed-cursor';
